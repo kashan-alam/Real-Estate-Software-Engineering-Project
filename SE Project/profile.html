@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YourProperty.com - User Profile</title>
+    <link rel="stylesheet" href="Styles/profilestyle.css">
+    <style>
+        /* Additional styles for the profile page */
+        .profile-container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .profile-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .profile-actions button {
+            background-color: #ff5a5f;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .profile-actions .action-link {
+            display: inline-block;
+            background-color: #004D73;
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+
+        .profile-actions .action-link:hover {
+            background-color: #003a5a;
+        }
+
+        .profile-sections {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .profile-section {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .profile-section h3 {
+            margin-top: 0;
+            color: #333;
+            border-bottom: 2px solid #ff5a5f;
+            padding-bottom: 10px;
+        }
+
+        .properties-list, .transactions-list {
+            margin-top: 20px;
+        }
+
+        .property-card, .transaction-card {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .no-data {
+            color: #888;
+            font-style: italic;
+        }
+
+        /* Hide profile by default */
+        #profile-view {
+            display: none;
+        }
+
+        /* Show login form by default */
+        #login-view {
+            display: block;
+        }
+
+        /* Error message styling */
+        .error-message {
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="logo">
+            <a href="index.html">
+                <h1>YourProperty.com</h1>
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="buy.html">Buy</a></li>
+                <li><a href="sell.html">Sell</a></li>
+                
+                <li><a href="profile.html">Profile</a></li>
+            </ul>
+        </nav>
+    </header>
+
+     <main>
+        <!-- Login View -->
+        <div id="login-view">
+        <form class="form" id="loginForm">
+            <div class="flex-column">
+                <label>Email </label>
+            </div>
+            <div class="inputForm">
+                <input id="email" name="email" placeholder="Enter your Email" class="input" type="email" required>
+            </div>
+        
+            <div class="flex-column">
+                <label>Password </label>
+            </div>
+            <div class="inputForm">
+                <input id="password" name="password" placeholder="Enter your Password" class="input" type="password" required>
+            </div>
+        
+            <button class="button-submit" type="submit">Sign In</button>
+                <div id="login-error" class="error-message"></div>
+            <p class="p">Don't have an account? <span class="span"><a href="register.html">Sign Up</a></span></p>
+        </form>
+        </div>
+
+        <!-- Profile View -->
+        <div id="profile-view" class="profile-container">
+            <div class="profile-header">
+                <div class="profile-info">
+                    <h2>Welcome, <span id="user-name">User</span></h2>
+                    <p id="user-email">email@example.com</p>
+                    <p id="user-phone">Phone: 123-456-7890</p>
+                </div>
+                <div class="profile-actions">
+                    <a href="transactions.html" class="action-link">View Pending Transactions</a>
+                    <button id="logout-btn">Logout</button>
+                </div>
+            </div>
+
+            <div class="profile-sections">
+                <!-- Seller Information Section -->
+                <div class="profile-section" id="seller-section">
+                    <h3>Seller Information</h3>
+                    <div id="seller-info">
+                        <p class="no-data">Not registered as a seller.</p>
+                    </div>
+
+                    <h3>My Properties</h3>
+                    <div id="properties-list" class="properties-list">
+                        <p class="no-data">No properties listed yet.</p>
+                    </div>
+                </div>
+
+                <!-- Buyer Information Section -->
+                <div class="profile-section" id="buyer-section">
+                    <h3>Buyer Information</h3>
+                    <div id="buyer-info">
+                        <p class="no-data">Not registered as a buyer.</p>
+                    </div>
+                </div>
+
+                <!-- Transactions Section -->
+                <div class="profile-section" id="sales-section">
+                    <h3>Sales History</h3>
+                    <div id="sales-list" class="transactions-list">
+                        <p class="no-data">No sales transactions yet.</p>
+                    </div>
+                </div>
+
+                <div class="profile-section" id="purchases-section">
+                    <h3>Purchase History</h3>
+                    <div id="purchases-list" class="transactions-list">
+                        <p class="no-data">No purchase transactions yet.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+</main>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>© 2024 YourProperty.com | All rights reserved.</p>
+    </footer>
+
+    <script>
+        // On page load, check if user is already logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            checkLoginStatus();
+
+            // Handle login form submission
+            document.getElementById('loginForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                
+                // Clear previous error messages
+                document.getElementById('login-error').textContent = '';
+                
+                // Basic validation
+                if (!email || !password) {
+                    document.getElementById('login-error').textContent = 'Please enter both email and password';
+                    return;
+                }
+                
+                // Attempt login
+                loginUser(email, password);
+            });
+            
+            // Handle logout button click
+            document.getElementById('logout-btn').addEventListener('click', logoutUser);
+        });
+        
+        // Function to check if user is already logged in
+        function checkLoginStatus() {
+            const userData = localStorage.getItem('user');
+            console.log('Checking login status, user data:', userData);
+            
+            if (userData) {
+                try {
+                    const user = JSON.parse(userData);
+                    console.log('Parsed user data:', user);
+                    
+                    if (user && user.id) {
+                        // Verify session on server
+                        fetch(`http://localhost:3000/users/session/${user.id}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success && data.isLoggedIn) {
+                                    console.log('Session is valid, showing profile view with user:', user);
+                                    showProfileView(user);
+                                    loadUserProfile(user.id);
+                                } else {
+                                    // Session expired or invalid
+                                    localStorage.removeItem('user');
+                                    showLoginView();
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Session verification error:', error);
+                                showLoginView();
+                            });
+                    } else {
+                        showLoginView();
+                    }
+                } catch (error) {
+                    console.error('Error parsing user data:', error);
+                    localStorage.removeItem('user');
+                    showLoginView();
+                }
+            } else {
+                showLoginView();
+            }
+        }
+        
+        // Function to login user
+        function loginUser(email, password) {
+            console.log('Attempting login with:', email);
+            fetch('http://localhost:3000/users/login', {
+            method: 'POST',
+            headers: {
+                    'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('Login success, user data:', data.user);
+                    // Store user data in local storage
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    
+                    // Show profile view
+                    showProfileView(data.user);
+                    
+                    // Load user profile data
+                    loadUserProfile(data.user.id);
+                } else {
+                    document.getElementById('login-error').textContent = data.message || 'Login failed';
+                }
+            })
+            .catch(error => {
+                console.error('Login error:', error);
+                document.getElementById('login-error').textContent = 'Network error. Please try again.';
+            });
+        }
+        
+        // Function to logout user
+        function logoutUser() {
+            fetch('http://localhost:3000/users/logout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Clear user data from local storage
+                localStorage.removeItem('user');
+                
+                // Show login view
+                showLoginView();
+            })
+            .catch(error => {
+                console.error('Logout error:', error);
+                
+                // Still remove user data and show login view even if server request fails
+                localStorage.removeItem('user');
+                showLoginView();
+            });
+        }
+        
+        // Function to show profile view
+        function showProfileView(user) {
+            console.log('Showing profile view with user data:', user);
+            document.getElementById('login-view').style.display = 'none';
+            document.getElementById('profile-view').style.display = 'block';
+            
+            // Update profile header with user info - ensure we display the user's actual name
+            if (user && user.name) {
+                console.log('Setting user name to:', user.name);
+                document.getElementById('user-name').textContent = user.name;
+        } else {
+                console.log('No user name found, using default');
+                document.getElementById('user-name').textContent = 'User';
+            }
+            
+            document.getElementById('user-email').textContent = user.email || '';
+            document.getElementById('user-phone').textContent = `Phone: ${user.phone || user.ContactNumber || 'Not provided'}`;
+        }
+        
+        // Function to show login view
+        function showLoginView() {
+            document.getElementById('login-view').style.display = 'block';
+            document.getElementById('profile-view').style.display = 'none';
+            
+            // Clear login form
+            document.getElementById('loginForm').reset();
+            document.getElementById('login-error').textContent = '';
+        }
+        
+        // Function to load user profile data
+        function loadUserProfile(userId) {
+            fetch(`http://localhost:3000/users/profile/${userId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const profileData = data.data;
+                        
+                        // Update user name in the header with fresh data from the server
+                        if (profileData.user && profileData.user.name) {
+                            document.getElementById('user-name').textContent = profileData.user.name;
+                            document.getElementById('user-email').textContent = profileData.user.email;
+                            document.getElementById('user-phone').textContent = `Phone: ${profileData.user.ContactNumber || 'Not provided'}`;
+                        }
+                        
+                        // Update seller information - now handling multiple sellers
+                        if (profileData.sellers && profileData.sellers.length > 0) {
+                            // Create HTML for all seller records
+                            const sellersHTML = profileData.sellers.map(seller => `
+                                <div class="seller-card">
+                                    <p><strong>Seller ID:</strong> ${seller.sellerID}</p>
+                                    <p><strong>Seller Type:</strong> ${seller.sellerType || 'Standard'}</p>
+                                </div>
+                            `).join('');
+                            
+                            document.getElementById('seller-info').innerHTML = `
+                                <h4>You are registered as ${profileData.sellers.length} seller(s):</h4>
+                                ${sellersHTML}
+                            `;
+                        }
+                        
+                        // Update buyer information
+                        if (profileData.buyer) {
+                            document.getElementById('buyer-info').innerHTML = `
+                                <p><strong>Buyer ID:</strong> ${profileData.buyer.buyerID}</p>
+                                <p><strong>Buyer Type:</strong> ${profileData.buyer.buyerType || 'Standard'}</p>
+                            `;
+                        }
+                        
+                        // Update properties list - now displaying all properties
+                        if (profileData.properties && profileData.properties.length > 0) {
+                            const propertiesHTML = profileData.properties.map(property => `
+                                <div class="property-card">
+                                    <h4>${property.propertyType}</h4>
+                                    <p><strong>Listing Type:</strong> ${property.sellerType}</p>
+                                    <p><strong>Seller ID:</strong> ${property.sellerID}</p>
+                                    <p>Location: ${property.city}, ${property.town}</p>
+                                    <p>Price: $${property.price}</p>
+                                    <p>Size: ${property.size} sqft</p>
+                                    <p>Status: ${property.status}</p>
+                                    <p>${property.description || ''}</p>
+                                </div>
+                            `).join('');
+                            
+                            document.getElementById('properties-list').innerHTML = propertiesHTML;
+                        }
+                        
+                        // Update sales transactions
+                        if (profileData.salesTransactions && profileData.salesTransactions.length > 0) {
+                            const salesHTML = profileData.salesTransactions.map(transaction => `
+                                <div class="transaction-card">
+                                    <h4>Transaction #${transaction.transactionID}</h4>
+                                    <p><strong>Seller ID:</strong> ${transaction.sellerID} (${transaction.sellerType})</p>
+                                    <p>Property: ${transaction.propertyType}</p>
+                                    <p>Date: ${new Date(transaction.tdate).toLocaleDateString()}</p>
+                                    <p>Amount: $${transaction.price}</p>
+                                    <p>Commission: $${transaction.commission}</p>
+                                    <p>Type: ${transaction.ttype}</p>
+                                </div>
+                            `).join('');
+                            
+                            document.getElementById('sales-list').innerHTML = salesHTML;
+                        }
+                        
+                        // Update purchase transactions
+                        if (profileData.purchaseTransactions && profileData.purchaseTransactions.length > 0) {
+                            const purchasesHTML = profileData.purchaseTransactions.map(transaction => `
+                                <div class="transaction-card">
+                                    <h4>Transaction #${transaction.transactionID}</h4>
+                                    <p>Property: ${transaction.propertyType}</p>
+                                    <p>Date: ${new Date(transaction.tdate).toLocaleDateString()}</p>
+                                    <p>Amount: $${transaction.price}</p>
+                                    <p>Type: ${transaction.ttype}</p>
+                                </div>
+                            `).join('');
+                            
+                            document.getElementById('purchases-list').innerHTML = purchasesHTML;
+                        }
+                    } else {
+                        console.error('Error loading profile:', data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching profile data:', error);
+                });
+}
+        </script>
+</body>
+
+</html>

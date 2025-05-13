@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YourProperty.com - My Transactions</title>
+    <link rel="stylesheet" href="Styles/style.css">
+    <style>
+        .transactions-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .page-title {
+            margin-bottom: 20px;
+            color: #004D73;
+        }
+
+        .login-required {
+            background-color: #ffebee;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .login-required a {
+            color: #004D73;
+            text-decoration: underline;
+        }
+
+        .transactions-list {
+            margin-top: 20px;
+        }
+
+        .transaction-card {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 20px;
+        }
+
+        .property-image {
+            width: 100%;
+            border-radius: 5px;
+            aspect-ratio: 4/3;
+            object-fit: cover;
+        }
+
+        .transaction-details h3 {
+            margin-top: 0;
+            color: #004D73;
+        }
+
+        .transaction-details p {
+            margin: 5px 0;
+        }
+
+        .transaction-date {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .price-section {
+            text-align: right;
+        }
+
+        .property-price {
+            font-size: 20px;
+            font-weight: bold;
+            color: #004D73;
+            margin-bottom: 5px;
+        }
+
+        .commission {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .total-amount {
+            font-size: 22px;
+            font-weight: bold;
+            color: #004D73;
+            margin-bottom: 15px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        .status-under-contract {
+            background-color: #e6f3ff;
+            color: #004D73;
+        }
+
+        .payment-form {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group select, .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .complete-button {
+            background-color: #004D73;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .complete-button:hover {
+            background-color: #003a5a;
+        }
+
+        .complete-button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .error-message {
+            color: red;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .success-message {
+            color: green;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .no-transactions {
+            text-align: center;
+            padding: 50px 0;
+            color: #666;
+            font-style: italic;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px 0;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .transaction-card {
+                grid-template-columns: 1fr;
+            }
+
+            .price-section {
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="logo">
+            <a href="index.html">
+                <h1>YourProperty.com</h1>
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="buy.html">Buy</a></li>
+                <li><a href="sell.html">Sell</a></li>
+                <li><a href="rent.html">Rent</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+                <li><a href="profile.html">Profile</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="transactions-container">
+        <h1 class="page-title">My Pending Transactions</h1>
+
+        <div id="login-required" class="login-required" style="display: none;">
+            <p>You need to be logged in to view your transactions. <a href="profile.html">Click here to login</a></p>
+        </div>
+
+        <div id="loading" class="loading">Loading your transactions...</div>
+
+        <div id="transactions-list" class="transactions-list"></div>
+
+        <div id="no-transactions" class="no-transactions" style="display: none;">
+            You have no pending transactions. <a href="buy.html">Browse properties</a> to start.
+        </div>
+    </main>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>© 2024 YourProperty.com | All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in
+            const userString = localStorage.getItem('user');
+            if (!userString) {
+                document.getElementById('login-required').style.display = 'block';
+                document.getElementById('loading').style.display = 'none';
+                return;
+            }
+
+            const userData = JSON.parse(userString);
+            loadUserTransactions(userData);
+        });
+
+        // Load user transactions
+        function loadUserTransactions(userData) {
+            // First, fetch user profile to get buyer ID
+            fetch(`http://localhost:3000/users/profile/${userData.id}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.data.buyer) {
+                        const buyerId = data.data.buyer.buyerID;
+                        fetchTransactions(buyerId);
+                    } else {
+                        // User is not a buyer yet
+                        document.getElementById('loading').style.display = 'none';
+                        document.getElementById('no-transactions').style.display = 'block';
+                        document.getElementById('no-transactions').textContent = 'You are not registered as a buyer yet.';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching user profile:', error);
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('no-transactions').style.display = 'block';
+                    document.getElementById('no-transactions').textContent = 'Error loading profile data. Please try again later.';
+                });
+        }
+
+        // Fetch transactions for the buyer
+        function fetchTransactions(buyerId) {
+            fetch(`http://localhost:3000/properties/buyer-transactions/${buyerId}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('loading').style.display = 'none';
+                    
+                    if (!data.success || !data.data || data.data.length === 0) {
+                        document.getElementById('no-transactions').style.display = 'block';
+                        return;
+                    }
+                    
+                    displayTransactions(data.data);
+                })
+                .catch(error => {
+                    console.error('Error fetching transactions:', error);
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('no-transactions').style.display = 'block';
+                    document.getElementById('no-transactions').textContent = 'Error loading transactions. Please try again later.';
+                });
+        }
+
+        // Display transactions
+        function displayTransactions(transactions) {
+            const container = document.getElementById('transactions-list');
+            container.innerHTML = '';
+            
+            transactions.forEach(transaction => {
+                const transactionCard = document.createElement('div');
+                transactionCard.className = 'transaction-card';
+                
+                // Calculate total amount
+                const price = parseFloat(transaction.price);
+                const commission = parseFloat(transaction.commission);
+                const total = price + commission;
+                
+                // Format date
+                const date = new Date(transaction.tdate).toLocaleDateString();
+                
+                // Default image if none provided
+                const imageUrl = transaction.imageURL || 'https://via.placeholder.com/300x200?text=No+Image';
+                
+                transactionCard.innerHTML = `
+                    <div>
+                        <img src="${imageUrl}" alt="${transaction.propertyType}" class="property-image">
+                    </div>
+                    <div class="transaction-details">
+                        <h3>${transaction.propertyType}</h3>
+                        <p><strong>Location:</strong> ${transaction.city}, ${transaction.town}</p>
+                        <p><strong>Size:</strong> ${transaction.size} sqft</p>
+                        <p><strong>Listing Type:</strong> ${transaction.sellerType}</p>
+                        <p class="transaction-date">Transaction initiated on ${date}</p>
+                        <div class="status-badge status-under-contract">Under Contract</div>
+                        <p>${transaction.description || ''}</p>
+                    </div>
+                    <div class="price-section">
+                        <p class="property-price">$${price.toFixed(2)}</p>
+                        <p class="commission">+ $${commission.toFixed(2)} commission (1%)</p>
+                        <p class="total-amount">Total: $${total.toFixed(2)}</p>
+                        
+                        <div class="payment-form" id="payment-form-${transaction.transactionID}">
+                            <form onsubmit="completeTransaction(event, ${transaction.transactionID})">
+                                <div class="form-group">
+                                    <label for="payment-method-${transaction.transactionID}">Payment Method</label>
+                                    <select id="payment-method-${transaction.transactionID}" required>
+                                        <option value="">Select Payment Method</option>
+                                        <option value="bank_transfer">Bank Transfer</option>
+                                        <option value="cash">Cash</option>
+                                        <option value="check">Check</option>
+                                        <option value="credit_card">Credit Card</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="payment-date-${transaction.transactionID}">Payment Date</label>
+                                    <input type="date" id="payment-date-${transaction.transactionID}" required>
+                                </div>
+                                <button type="submit" class="complete-button">Complete Purchase</button>
+                                <div class="error-message" id="error-${transaction.transactionID}"></div>
+                                <div class="success-message" id="success-${transaction.transactionID}"></div>
+                            </form>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(transactionCard);
+                
+                // Set today as default payment date
+                const today = new Date().toISOString().split('T')[0];
+                document.getElementById(`payment-date-${transaction.transactionID}`).value = today;
+            });
+        }
+
+        // Complete a transaction
+        function completeTransaction(event, transactionId) {
+            event.preventDefault();
+            
+            const paymentMethod = document.getElementById(`payment-method-${transactionId}`).value;
+            const paymentDate = document.getElementById(`payment-date-${transactionId}`).value;
+            const errorElement = document.getElementById(`error-${transactionId}`);
+            const successElement = document.getElementById(`success-${transactionId}`);
+            const submitButton = event.target.querySelector('button[type="submit"]');
+            
+            // Clear previous messages
+            errorElement.textContent = '';
+            successElement.textContent = '';
+            
+            if (!paymentMethod) {
+                errorElement.textContent = 'Please select a payment method.';
+                return;
+            }
+            
+            if (!paymentDate) {
+                errorElement.textContent = 'Please select a payment date.';
+                return;
+            }
+            
+            // Disable button during API call
+            submitButton.disabled = true;
+            submitButton.textContent = 'Processing...';
+            
+            fetch('http://localhost:3000/properties/complete-transaction', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    transactionId: transactionId,
+                    paymentMethod: paymentMethod,
+                    paymentDate: paymentDate
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    successElement.textContent = 'Transaction completed successfully!';
+                    
+                    // Disable the form after successful completion
+                    const form = document.getElementById(`payment-form-${transactionId}`).querySelector('form');
+                    const inputs = form.querySelectorAll('input, select');
+                    inputs.forEach(input => input.disabled = true);
+                    submitButton.textContent = 'Purchase Completed';
+                    
+                    // Reload transactions after a delay
+                    setTimeout(() => {
+                        window.location.href = 'profile.html';
+                    }, 3000);
+                } else {
+                    errorElement.textContent = data.message || 'Error completing transaction.';
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Complete Purchase';
+                }
+            })
+            .catch(error => {
+                console.error('Error completing transaction:', error);
+                errorElement.textContent = 'Network error. Please try again.';
+                submitButton.disabled = false;
+                submitButton.textContent = 'Complete Purchase';
+            });
+        }
+    </script>
+</body>
+
+</html> 

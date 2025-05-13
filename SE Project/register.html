@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YourProperty.com - Register</title>
+    <link rel="stylesheet" href="Styles/registerstyle.css">
+    <style>
+        .error-message {
+            color: #ff3b30;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        
+        .success-message {
+            color: #28a745;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        
+        .form-content {
+            position: relative;
+        }
+        
+        .password-requirements {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="logo">
+            <a href="index.html">
+                <h1>YourProperty.com</h1>
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="buy.html">Buy</a></li>
+                <li><a href="sell.html">Sell</a></li>
+                <li><a href="rent.html">Rent</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+                <li><a href="profile.html">Profile</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Registration Form -->
+    <main>
+        <div class="signup-container">
+            <div class="header">
+                <div>
+                    <h2>Sign Up</h2>
+                    <hr />
+                    <div class="form-content">
+                        <form id="signup-form">
+                            <div class="name-fields">
+                                <input type="text" name="name" id="name" placeholder="Name" class="input-field" required>
+                            </div>
+                            <div>
+                                <input type="email" name="email" id="email" placeholder="Email address" class="input-field full-width" required>
+                            </div>
+                            <div>
+                                <input type="password" name="password" id="password" placeholder="Password" class="input-field full-width" required>
+                                <p class="password-requirements">Password should be at least 6 characters</p>
+                            </div>
+                            <div>
+                                <input type="password" name="confirm-password" id="confirm-password" placeholder="Confirm Password" class="input-field full-width" required>
+                            </div>
+                            <div>
+                                <input type="text" name="phone" id="phone" placeholder="Contact number" class="input-field full-width" required>
+                            </div>
+                            <button type="submit" class="signup-button">Sign Up</button>
+                            <div id="error-message" class="error-message"></div>
+                            <div id="success-message" class="success-message"></div>
+                        </form>
+                        <p>Already have an account? <a href="profile.html">Sign In</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>© 2024 YourProperty.com | All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('signup-form');
+            const nameInput = document.getElementById('name');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const confirmPasswordInput = document.getElementById('confirm-password');
+            const phoneInput = document.getElementById('phone');
+            const errorMessage = document.getElementById('error-message');
+            const successMessage = document.getElementById('success-message');
+
+            // Form validation function
+            function validateForm() {
+                errorMessage.textContent = '';
+                
+                if (nameInput.value.trim() === '') {
+                    errorMessage.textContent = 'Name is required';
+                    return false;
+                }
+                
+                if (emailInput.value.trim() === '') {
+                    errorMessage.textContent = 'Email is required';
+                    return false;
+                }
+                
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailPattern.test(emailInput.value)) {
+                    errorMessage.textContent = 'Please enter a valid email address';
+                    return false;
+                }
+                
+                if (passwordInput.value.length < 6) {
+                    errorMessage.textContent = 'Password must be at least 6 characters';
+                    return false;
+                }
+                
+                if (passwordInput.value !== confirmPasswordInput.value) {
+                    errorMessage.textContent = 'Passwords do not match';
+                    return false;
+                }
+                
+                if (phoneInput.value.trim() === '') {
+                    errorMessage.textContent = 'Phone number is required';
+                    return false;
+                }
+                
+                return true;
+            }
+
+            // Form submission handler
+            form.addEventListener('submit', async function(event) {
+                event.preventDefault();
+                
+                if (!validateForm()) {
+                    return;
+                }
+                
+                // Clear messages
+                errorMessage.textContent = '';
+                successMessage.textContent = '';
+                
+                try {
+                    const response = await fetch('http://localhost:3000/users/register', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            name: nameInput.value.trim(),
+                            email: emailInput.value.trim(),
+                            password: passwordInput.value,
+                            phone: phoneInput.value.trim()
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    console.log('Registration response:', data);
+                    
+                    if (data.success) {
+                        successMessage.textContent = 'Registration successful! Redirecting to login...';
+                        form.reset();
+                        
+                        // Redirect to login page after a short delay
+                        setTimeout(() => {
+                            window.location.href = 'profile.html';
+                        }, 2000);
+                    } else {
+                        errorMessage.textContent = data.message || 'Registration failed. Please try again.';
+                    }
+                } catch (error) {
+                    console.error('Registration error:', error);
+                    errorMessage.textContent = 'Network error. Please try again later.';
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

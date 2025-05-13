@@ -1,0 +1,225 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-rows: auto 1fr auto; /* Header, main content, and footer layout */
+    height: 100vh;
+    background-color: #F5F5F5; /* Neutral Light Gray */
+    color: #333; /* Neutral Dark Gray */
+}
+
+/* Header */
+header {
+    background-color: #004D73; /* Deep Blue */
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+header .logo a {
+    text-decoration: none;
+    color: white;
+}
+
+header .logo h1 {
+    font-size: 28px;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+header .logo h1:hover {
+    color: #F2C94C; /* Warm Gold */
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    margin: 0;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    transition: color 0.3s ease;
+}
+
+nav ul li a:hover {
+    color: #F2C94C; /* Warm Gold */
+}
+
+/* Centering the Form */
+main {
+    display: flex;
+    justify-content: center; /* Horizontally center the form */
+    align-items: center;    /* Vertically center the form */
+    background-color: #F5F5F5;
+}
+
+/* Profile Sign-in Form */
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: #ffffff;
+    padding: 30px;
+    width: 450px;
+    border-radius: 20px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Add shadow for a modern look */
+}
+
+::placeholder {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.form button {
+    align-self: flex-end;
+}
+
+.flex-column > label {
+    color: #151717;
+    font-weight: 600;
+}
+
+.inputForm {
+    border: 1.5px solid #ecedec;
+    border-radius: 10px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    transition: 0.2s ease-in-out;
+    align-items: center;
+}
+
+.input {
+    margin-left: 10px;
+    border-radius: 10px;
+    border: none;
+    width: 100%;
+    height: 100%;
+}
+
+.input:focus {
+    outline: none;
+}
+
+.inputForm:focus-within {
+    border: 1.5px solid #2d79f3;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    justify-content: space-between;
+}
+
+.flex-row > div > label {
+    font-size: 14px;
+    color: black;
+    font-weight: 400;
+}
+
+.span {
+    font-size: 14px;
+    margin-left: 5px;
+    color: #004D73;
+    font-weight: 500;
+    cursor: pointer;
+}
+/*.button-submit {
+    margin: 20px 0 10px 0;
+    background-color: #004D73;
+    border: none;
+    color: white;
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 10px;
+    height: 50px;
+    width: 100%;
+    cursor: pointer;
+}*/
+
+.button-submit {
+    display: inline-block;
+    background-color: #007BFF; /* Button background color */
+    color: white; /* Text color */
+    text-decoration: none; /* Remove underline */
+    padding: 10px 20px; /* Button padding */
+    font-size: 16px; /* Text size */
+    border-radius: 5px; /* Rounded corners */
+    text-align: center;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.button-submit:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+
+.p {
+    text-align: center;
+    color: black;
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+.btn {
+    margin-top: 10px;
+    width: 100%;
+    height: 50px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 500;
+    gap: 10px;
+    border: 1px solid #ededef;
+    background-color: white;
+    cursor: pointer;
+    transition: 0.2s ease-in-out;
+}
+
+.btn:hover {
+    border: 1px solid #004D73;
+}
+
+/* Footer */
+footer {
+    background-color: #004D73; /* Deep Blue */
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+}
+.error-message {
+    color: #ff4444;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 4px;
+    background-color: #ffebee;
+    text-align: center;
+}
+
+.inputForm {
+    margin-bottom: 15px;
+}
+
+.button-submit {
+    margin-top: 10px;
+}
+
+#error-message {
+    margin-top: 10px;
+    padding: 8px;
+    background: #ffebee;
+    border-radius: 4px;
+  }

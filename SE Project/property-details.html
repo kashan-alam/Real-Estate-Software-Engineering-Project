@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YourProperty.com - Property Details</title>
+    <link rel="stylesheet" href="Styles/style.css">
+    <style>
+        .property-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .property-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .property-title {
+            margin-top: 0;
+        }
+
+        .property-price {
+            font-size: 24px;
+            font-weight: bold;
+            color: #004D73;
+        }
+
+        .property-image {
+            width: 100%;
+            max-height: 500px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .property-details {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+
+        .property-description {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .property-specs {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .property-specs ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .property-specs li {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .property-specs li:last-child {
+            border-bottom: none;
+        }
+
+        .action-button {
+            background-color: #004D73;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .action-button:hover {
+            background-color: #003a5a;
+        }
+
+        .action-button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .purchase-form {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .transaction-summary {
+            background-color: #e6f3ff;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .total-amount {
+            font-size: 20px;
+            font-weight: bold;
+            color: #004D73;
+            margin-top: 10px;
+        }
+
+        .error-message {
+            color: red;
+            margin-top: 10px;
+        }
+
+        .success-message {
+            color: green;
+            margin-top: 10px;
+        }
+
+        /* Login required message */
+        .login-required {
+            background-color: #ffebee;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .login-required a {
+            color: #004D73;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="logo">
+            <a href="index.html">
+                <h1>YourProperty.com</h1>
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="buy.html">Buy</a></li>
+                <li><a href="sell.html">Sell</a></li>
+                <li><a href="rent.html">Rent</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+                <li><a href="profile.html">Profile</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="property-container">
+        <div id="login-required" class="login-required" style="display: none;">
+            <p>You need to be logged in to purchase property. <a href="profile.html">Click here to login</a></p>
+        </div>
+
+        <div id="property-view">
+            <div class="property-header">
+                <div>
+                    <h1 id="property-title" class="property-title">Property Title</h1>
+                    <p id="property-location">Location</p>
+                </div>
+                <div>
+                    <p id="property-price" class="property-price">$0</p>
+                    <p id="property-status">Status: Available</p>
+                </div>
+            </div>
+
+            <img id="property-image" src="https://via.placeholder.com/800x500?text=Property+Image" alt="Property" class="property-image">
+
+            <div class="property-details">
+                <div class="property-description">
+                    <h2>Description</h2>
+                    <p id="property-description-text">Loading property description...</p>
+                </div>
+
+                <div class="property-specs">
+                    <h2>Property Details</h2>
+                    <ul>
+                        <li><strong>Type:</strong> <span id="property-type">-</span></li>
+                        <li><strong>Size:</strong> <span id="property-size">-</span> sqft</li>
+                        <li><strong>Listing Type:</strong> <span id="property-listing-type">-</span></li>
+                        <li><strong>City:</strong> <span id="property-city">-</span></li>
+                        <li><strong>Town:</strong> <span id="property-town">-</span></li>
+                    </ul>
+
+                    <button id="purchase-button" class="action-button">Start Purchase Process</button>
+                    <div id="purchase-error" class="error-message"></div>
+                </div>
+            </div>
+
+            <div id="purchase-form" class="purchase-form">
+                <h2>Complete Your Purchase</h2>
+                
+                <div class="transaction-summary">
+                    <h3>Transaction Summary</h3>
+                    <p><strong>Property Price:</strong> $<span id="summary-price">0</span></p>
+                    <p><strong>Commission (1%):</strong> $<span id="summary-commission">0</span></p>
+                    <p class="total-amount">Total: $<span id="summary-total">0</span></p>
+                </div>
+
+                <div class="form-group">
+                    <label for="payment-method">Payment Method</label>
+                    <select id="payment-method" required>
+                        <option value="">Select Payment Method</option>
+                        <option value="bank_transfer">Bank Transfer</option>
+                        <option value="cash">Cash</option>
+                        <option value="check">Check</option>
+                        <option value="credit_card">Credit Card</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="payment-date">Payment Date</label>
+                    <input type="date" id="payment-date" required>
+                </div>
+
+                <button id="confirm-purchase" class="action-button">Confirm Purchase</button>
+                <div id="confirm-error" class="error-message"></div>
+                <div id="confirm-success" class="success-message"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>© 2024 YourProperty.com | All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Global variables
+        let propertyData = null;
+        let userData = null;
+        let buyerId = null;
+        let transactionId = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Default base64 image data - a simple gray placeholder
+            // Disable purchase button initially until we confirm buyer status
+            document.getElementById('purchase-button').disabled = true;
+            
+            // Check if user is logged in
+            const userString = localStorage.getItem('user');
+            if (userString) {
+                userData = JSON.parse(userString);
+                checkBuyerStatus(userData.id);
+            } else {
+                // Show login required message
+                document.getElementById('login-required').style.display = 'block';
+                document.getElementById('purchase-button').disabled = true;
+            }
+
+            // Get the property ID from URL query parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const propertyId = urlParams.get('id');
+
+            if (!propertyId) {
+                window.location.href = 'buy.html'; // Redirect if no property ID is provided
+                return;
+            }
+
+            // Fetch property details
+            fetchPropertyDetails(propertyId);
+
+            // Setup event listeners
+            document.getElementById('purchase-button').addEventListener('click', initiatePurchase);
+            document.getElementById('confirm-purchase').addEventListener('click', completePurchase);
+        });
+
+        // Check if the user is already a buyer or create a buyer record
+        function checkBuyerStatus(userId) {
+            // Always create a new buyer record for this purchase
+            createBuyerRecord(userId);
+        }
+
+        // Create a new buyer record for each property purchase
+        function createBuyerRecord(userId) {
+            // Use 'buy' as the buyer type since that's what's allowed in the database enum
+            console.log("Creating buyer record for user ID:", userId);
+            
+            fetch('http://localhost:3000/users/create-buyer', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 
+                    userId: userId,
+                    buyerType: 'buy' // Use 'buy' instead of default
+                })
+            })
+            .then(response => {
+                console.log("Create buyer response status:", response.status);
+                // Handle HTTP errors
+                if (!response.ok) {
+                    console.error('HTTP error:', response.status);
+                    
+                    // Even if we get an error, we should try to initiate the purchase
+                    // The server might have created the buyer record anyway
+                    const errorMessage = `Server responded with status ${response.status}`;
+                    document.getElementById('purchase-error').textContent = '';
+                    document.getElementById('purchase-button').disabled = false;
+                    
+                    // Try to proceed with purchase anyway
+                    return response.json().catch(() => {
+                        // If we can't parse JSON, return a dummy failed response
+                        return { success: false, message: errorMessage };
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    buyerId = data.buyerId;
+                    console.log('Buyer record created:', buyerId);
+                    // Enable purchase button after buyer profile is created
+                    document.getElementById('purchase-button').disabled = false;
+                    document.getElementById('purchase-error').textContent = '';
+                } else {
+                    console.error('Error creating buyer record:', data.message);
+                    
+                    // But we should still try to enable the purchase button
+                    document.getElementById('purchase-button').disabled = false;
+                    document.getElementById('purchase-error').textContent = '';
+                }
+            })
+            .catch(error => {
+                console.error('Error creating buyer record:', error);
+                
+                // Even if there's an error, we should try to enable the purchase button
+                // The user might still be able to proceed
+                document.getElementById('purchase-button').disabled = false;
+                document.getElementById('purchase-error').textContent = '';
+            });
+        }
+
+        // Fetch property details from the server
+        function fetchPropertyDetails(propertyId) {
+            fetch(`http://localhost:3000/properties/details/${propertyId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        propertyData = data.data;
+                        displayPropertyDetails(propertyData);
+                    } else {
+                        console.error('Error fetching property details:', data.message);
+                        document.getElementById('property-description-text').textContent = 'Error loading property details.';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching property details:', error);
+                    document.getElementById('property-description-text').textContent = 'Error connecting to the server.';
+                });
+        }
+
+        // Display property details on the page
+        function displayPropertyDetails(property) {
+            document.getElementById('property-title').textContent = property.propertyType;
+            document.getElementById('property-location').textContent = `${property.city}, ${property.town}`;
+            document.getElementById('property-price').textContent = `$${property.price}`;
+            document.getElementById('property-status').textContent = `Status: ${property.status}`;
+            document.getElementById('property-type').textContent = property.propertyType;
+            document.getElementById('property-size').textContent = property.size;
+            document.getElementById('property-listing-type').textContent = property.sellerType;
+            document.getElementById('property-city').textContent = property.city;
+            document.getElementById('property-town').textContent = property.town;
+            document.getElementById('property-description-text').textContent = property.description || 'No description available.';
+            
+            // Improved image handling
+            const propertyImage = document.getElementById('property-image');
+            
+            // Use a default image path instead of base64
+            if (property.imageURL && property.imageURL.trim() !== '') {
+                propertyImage.src = property.imageURL;
+                // Add backup in case the image URL doesn't load
+                propertyImage.onerror = function() {
+                    console.log('Failed to load image:', property.imageURL);
+                    this.src = 'https://via.placeholder.com/800x500?text=Property+Image';
+                    this.onerror = null; // Prevent infinite loops
+                };
+            } else {
+                // Use default image if no image URL is provided
+                console.log('No image URL provided, using default image');
+                propertyImage.src = 'https://via.placeholder.com/800x500?text=Property+Image';
+            }
+            propertyImage.alt = property.propertyType || 'Property';
+
+            // Calculate commission and total
+            const price = parseFloat(property.price);
+            const commission = price * 0.01;
+            const total = price + commission;
+
+            document.getElementById('summary-price').textContent = price.toFixed(2);
+            document.getElementById('summary-commission').textContent = commission.toFixed(2);
+            document.getElementById('summary-total').textContent = total.toFixed(2);
+
+            // Disable purchase button if property is not available
+            if (property.status !== 'available') {
+                document.getElementById('purchase-button').disabled = true;
+                document.getElementById('purchase-button').textContent = 'Not Available';
+                document.getElementById('purchase-error').textContent = `This property is unavailable for purchase.`;
+            }
+        }
+
+        // Initiate the purchase process
+        function initiatePurchase() {
+            console.log("Initiating purchase process...");
+            
+            if (!userData) {
+                document.getElementById('login-required').style.display = 'block';
+                return;
+            }
+
+            // Check if property is available
+            if (!propertyData || propertyData.status !== 'available') {
+                document.getElementById('purchase-error').textContent = 'This property is unavailable for purchase.';
+                return;
+            }
+
+            // Show a processing message
+            document.getElementById('purchase-error').textContent = 'Processing your request...';
+            document.getElementById('purchase-button').disabled = true;
+
+            // If we don't have a buyerId yet, get all buyer records from the profile
+            if (!buyerId) {
+                console.log("No buyer ID available, checking profile...");
+                fetch(`http://localhost:3000/users/profile/${userData.id}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success && data.data.buyers && data.data.buyers.length > 0) {
+                            // Use the last (most recent) buyer record
+                            buyerId = data.data.buyers[data.data.buyers.length - 1].buyerID;
+                            console.log('Found existing buyer ID from profile:', buyerId);
+                            continueWithTransaction();
+                        } else if (data.success && data.data.buyer) {
+                            // Fallback to the older single buyer field
+                            buyerId = data.data.buyer.buyerID;
+                            console.log('Found existing buyer ID from profile (legacy):', buyerId);
+                            continueWithTransaction();
+                        } else {
+                            // Create a new buyer record
+                            console.log('No buyer ID found, creating new record...');
+                            createBuyerRecord(userData.id);
+                            // We'll continue with the purchase in the createBuyerRecord callback
+                            document.getElementById('purchase-button').disabled = false;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error checking profile:', error);
+                        document.getElementById('purchase-error').textContent = 'Error connecting to the server. Please try again.';
+                        document.getElementById('purchase-button').disabled = false;
+                    });
+            } else {
+                // We already have a buyer ID, continue with the transaction
+                continueWithTransaction();
+            }
+        }
+
+        // Add a separate function for the actual transaction
+        function continueWithTransaction() {
+            console.log("Continuing with transaction. Buyer ID:", buyerId);
+            
+            // Send request to initiate transaction
+            fetch('http://localhost:3000/properties/initiate-transaction', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    propertyId: propertyData.propertyID,
+                    buyerId: buyerId,
+                    sellerId: propertyData.sellerID
+                })
+            })
+            .then(response => {
+                console.log("Transaction initiate response status:", response.status);
+                if (!response.ok) {
+                    console.error('HTTP error:', response.status);
+                    throw new Error('HTTP error ' + response.status);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Transaction response:', data);
+                
+                if (data.success) {
+                    // Check if it's a new transaction or an existing one
+                    const isExistingTransaction = data.message && data.message.includes('already exists');
+                    
+                    transactionId = data.data.transactionId;
+                    document.getElementById('purchase-form').style.display = 'block';
+                    document.getElementById('purchase-button').style.display = 'none';
+                    document.getElementById('purchase-error').textContent = '';
+                    
+                    // Set today as default payment date
+                    const today = new Date().toISOString().split('T')[0];
+                    document.getElementById('payment-date').value = today;
+                    
+                    // Update property status display to reflect 'unavailable'
+                    document.getElementById('property-status').textContent = 'Status: unavailable';
+                    
+                    // Update property data in memory
+                    propertyData.status = 'unavailable';
+                    
+                    // If it's an existing transaction, show a message
+                    if (isExistingTransaction) {
+                        document.getElementById('confirm-error').textContent = '';
+                        document.getElementById('confirm-success').textContent = 
+                            'You already have a pending transaction for this property. Please complete it below.';
+                    }
+                } else {
+                    console.error('Transaction error:', data.message);
+                    
+                    // Check if the error message indicates the property is already under contract or sold
+                    if (data.message && (data.message.includes('not available') || data.message.includes('under contract') || data.message.includes('sold'))) {
+                        document.getElementById('purchase-error').textContent = data.message;
+                        // Update UI to reflect the current property status
+                        document.getElementById('property-status').textContent = `Status: ${data.data && data.data.status ? data.data.status : 'unavailable'}`;
+                        propertyData.status = data.data && data.data.status ? data.data.status : 'unavailable';
+                    } else {
+                        document.getElementById('purchase-error').textContent = data.message || 'Failed to initiate transaction';
+                    }
+                    
+                    document.getElementById('purchase-button').disabled = false;
+                }
+            })
+            .catch(error => {
+                console.error('Error initiating transaction:', error);
+                document.getElementById('purchase-error').textContent = 'Error connecting to the server. Please try again.';
+                document.getElementById('purchase-button').disabled = false;
+            });
+        }
+
+        // Complete the purchase with payment
+        function completePurchase() {
+            if (!transactionId) {
+                document.getElementById('confirm-error').textContent = 'Transaction not initiated. Please try again.';
+                return;
+            }
+
+            const paymentMethod = document.getElementById('payment-method').value;
+            const paymentDate = document.getElementById('payment-date').value;
+
+            if (!paymentMethod) {
+                document.getElementById('confirm-error').textContent = 'Please select a payment method.';
+                return;
+            }
+
+            if (!paymentDate) {
+                document.getElementById('confirm-error').textContent = 'Please enter a payment date.';
+                return;
+            }
+
+            fetch('http://localhost:3000/properties/complete-transaction', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    transactionId: transactionId,
+                    paymentMethod: paymentMethod,
+                    paymentDate: paymentDate
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('confirm-success').textContent = 'Purchase completed successfully!';
+                    document.getElementById('confirm-error').textContent = '';
+                    document.getElementById('confirm-purchase').disabled = true;
+                    
+                    // Update property status display
+                    document.getElementById('property-status').textContent = 'Status: unavailable (sold)';
+                    
+                    // Redirect to profile page after a delay
+                    setTimeout(() => {
+                        window.location.href = 'profile.html';
+                    }, 3000);
+                } else {
+                    document.getElementById('confirm-error').textContent = data.message;
+                }
+            })
+            .catch(error => {
+                console.error('Error completing transaction:', error);
+                document.getElementById('confirm-error').textContent = 'Error connecting to the server. Please try again.';
+            });
+        }
+    </script>
+</body>
+
+</html> 

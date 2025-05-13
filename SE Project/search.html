@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YourProperty.com</title>
+    <link rel="stylesheet" href="Styles/search.css">
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <div class="logo">
+            <a href="index.html"><h1>YourProperty.com</h1></a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="buy.html">Buy</a></li>
+                <li><a href="sell.html">Sell</a></li>
+              
+            </ul>
+        </nav>
+    </header>
+    
+    <h1>Property Search Results</h1>
+    <p id="search-summary"></p>
+    <div id="property-results" style="display: flex; flex-wrap: wrap;gap:10px;padding:10px;">
+        <!-- Property results will appear here -->
+    </div>
+
+    <!--<script>
+        // Parse query parameters
+        const params = new URLSearchParams(window.location.search);
+        const location = params.get('location');
+        const propertyType = params.get('type');
+        const price = params.get('price');
+
+        // Display search summary
+        document.getElementById('search-summary').textContent = `Showing results for ${propertyType} properties in ${location} within the price range ${price}.`;
+
+        // Placeholder for fetching and displaying real properties
+        document.getElementById('property-results').innerHTML = `
+            <p>Example Property 1 - ${propertyType} in ${location} for ${price}</p>
+            <p>Example Property 2 - ${propertyType} in ${location} for ${price}</p>
+        `;
+    </script>-->
+    
+    <!-- Footer Section -->
+    <footer>
+        <p>© 2024 YourProperty.com | All rights reserved.</p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>

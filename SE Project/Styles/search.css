@@ -1,0 +1,84 @@
+
+*{
+    font-family: Arial, sans-serif;
+
+}
+header {
+    background-color: #004D73;
+    /* Deep Blue */
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+   
+    
+}
+
+header .logo a {
+    text-decoration: none;
+    color: white;
+}
+
+header .logo h1 {
+    font-size: 28px;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+header .logo h1:hover {
+    color: #F2C94C;
+    /* Warm Gold */
+}
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    margin: 0;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    transition: color 0.3s ease;
+}
+
+nav ul li a:hover {
+    color: #F2C94C;
+    /* Warm Gold */
+}
+
+body {
+    margin: 0;
+    padding-top: 90px; /* Match the height of the header */
+    
+}
+
+
+
+footer {
+    background-color: #004D73;
+    /* Deep Blue */
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+} 
+
+.property-card {
+    width: 500px;height: 500px;display: flex;flex-direction: column;justify-content: center;align-items: center;border-radius: 5px;gap:10px;
+    background-color: #c9c9c9;
+}
+
+.property-card img {
+    width: 100%;
+    height: 200px;border-radius: 5px;
+}

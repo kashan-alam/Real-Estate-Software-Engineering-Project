@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YourProperty.com - Buy Properties</title>
+    <link rel="stylesheet" href="Styles/style.css">
+    <style>
+        .properties-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .page-title {
+            margin-bottom: 20px;
+            color: #004D73;
+        }
+
+        .search-filters {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .filter-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-group label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .search-button {
+            background-color: #004D73;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+        }
+
+        .search-button:hover {
+            background-color: #003a5a;
+        }
+
+        .properties-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .property-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .property-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .property-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .property-details {
+            padding: 15px;
+        }
+
+        .property-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #004D73;
+        }
+
+        .property-location {
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .property-price {
+            font-size: 20px;
+            font-weight: bold;
+            color: #004D73;
+            margin-bottom: 10px;
+        }
+
+        .property-specs {
+            display: flex;
+            justify-content: space-between;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .property-status {
+            display: inline-block;
+            background-color: #e6f3ff;
+            color: #004D73;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+
+        .view-button {
+            background-color: #004D73;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+            display: block;
+            text-decoration: none;
+        }
+
+        .view-button:hover {
+            background-color: #003a5a;
+        }
+
+        .no-properties {
+            text-align: center;
+            padding: 50px 0;
+            color: #666;
+            font-style: italic;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px 0;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="logo">
+            <a href="index.html">
+                <h1>YourProperty.com</h1>
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="buy.html">Buy</a></li>
+                <li><a href="sell.html">Sell</a></li>
+               
+                <li><a href="profile.html">Profile</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="properties-container">
+        <h1 class="page-title">Available Properties for Sale</h1>
+
+        <section class="search-filters">
+            <form id="filter-form" class="filter-form">
+                <div class="filter-group">
+                    <label for="location">Location</label>
+                    <select id="location" name="location">
+                        <option value="">All Locations</option>
+                        <!-- Will be populated dynamically -->
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="property-type">Property Type</label>
+                    <select id="property-type" name="type">
+                        <option value="">All Types</option>
+                        <option value="residential">Residential</option>
+                        <option value="commercial">Commercial</option>
+                        <option value="industrial">Industrial</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="min-price">Min Price</label>
+                    <input type="number" id="min-price" name="minPrice" placeholder="Min Price">
+                </div>
+
+                <div class="filter-group">
+                    <label for="max-price">Max Price</label>
+                    <input type="number" id="max-price" name="maxPrice" placeholder="Max Price">
+                </div>
+
+                <div class="filter-group">
+                    <label for="min-size">Min Size (sqft)</label>
+                    <input type="number" id="min-size" name="minSize" placeholder="Min Size">
+                </div>
+
+                <div class="filter-group">
+                    <button type="submit" class="search-button">Search Properties</button>
+                </div>
+            </form>
+        </section>
+
+        <section id="properties-list">
+            <div id="loading" class="loading">Loading properties...</div>
+            <div id="properties-grid" class="properties-grid"></div>
+            <div id="no-properties" class="no-properties" style="display: none;">No properties found matching your criteria.</div>
+        </section>
+    </main>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>© 2024 YourProperty.com | All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initial load of all properties
+            loadProperties();
+            
+            // Load locations for filter dropdown
+            loadLocations();
+            
+            // Set up event listeners
+            document.getElementById('filter-form').addEventListener('submit', function(event) {
+                event.preventDefault();
+                filterProperties();
+            });
+        });
+        
+        // Load all available properties
+        function loadProperties() {
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('properties-grid').innerHTML = '';
+            document.getElementById('no-properties').style.display = 'none';
+            
+            fetch('http://localhost:3000/properties/all')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('loading').style.display = 'none';
+                    
+                    if (data.length === 0) {
+                        document.getElementById('no-properties').style.display = 'block';
+                        return;
+                    }
+                    
+                    displayProperties(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching properties:', error);
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('no-properties').textContent = 'Error loading properties. Please try again later.';
+                    document.getElementById('no-properties').style.display = 'block';
+                });
+        }
+        
+        // Load unique locations for the filter dropdown
+        function loadLocations() {
+            fetch('http://localhost:3000/properties/all')
+                .then(response => response.json())
+                .then(data => {
+                    // Extract unique cities
+                    const locations = [...new Set(data.map(property => `${property.city}`))];
+                    const locationSelect = document.getElementById('location');
+                    
+                    // Add options to select
+                    locations.forEach(location => {
+                        const option = document.createElement('option');
+                        option.value = location;
+                        option.textContent = location;
+                        locationSelect.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading locations:', error);
+                });
+        }
+        
+        // Filter properties based on form inputs
+        function filterProperties() {
+            const location = document.getElementById('location').value;
+            const propertyType = document.getElementById('property-type').value;
+            const minPrice = document.getElementById('min-price').value;
+            const maxPrice = document.getElementById('max-price').value;
+            const minSize = document.getElementById('min-size').value;
+            
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('properties-grid').innerHTML = '';
+            document.getElementById('no-properties').style.display = 'none';
+            
+            fetch('http://localhost:3000/properties/all')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('loading').style.display = 'none';
+                    
+                    // Apply filters
+                    let filteredProperties = data;
+                    
+                    if (location) {
+                        filteredProperties = filteredProperties.filter(property => 
+                            property.city === location
+                        );
+                    }
+                    
+                    if (propertyType) {
+                        filteredProperties = filteredProperties.filter(property => 
+                            property.propertyType === propertyType
+                        );
+                    }
+                    
+                    if (minPrice) {
+                        filteredProperties = filteredProperties.filter(property => 
+                            property.price >= parseFloat(minPrice)
+                        );
+                    }
+                    
+                    if (maxPrice) {
+                        filteredProperties = filteredProperties.filter(property => 
+                            property.price <= parseFloat(maxPrice)
+                        );
+                    }
+                    
+                    if (minSize) {
+                        filteredProperties = filteredProperties.filter(property => 
+                            property.size >= parseFloat(minSize)
+                        );
+                    }
+                    
+                    if (filteredProperties.length === 0) {
+                        document.getElementById('no-properties').style.display = 'block';
+                        return;
+                    }
+                    
+                    displayProperties(filteredProperties);
+                })
+                .catch(error => {
+                    console.error('Error filtering properties:', error);
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('no-properties').textContent = 'Error filtering properties. Please try again later.';
+                    document.getElementById('no-properties').style.display = 'block';
+                });
+        }
+        
+        // Display properties in the grid
+        function displayProperties(properties) {
+            const grid = document.getElementById('properties-grid');
+            grid.innerHTML = '';
+            
+            properties.forEach(property => {
+                const propertyCard = document.createElement('div');
+                propertyCard.className = 'property-card';
+                
+                // Default image if none provided
+                const imageUrl = property.imageURL || 'https://via.placeholder.com/300x200?text=No+Image';
+                
+                propertyCard.innerHTML = `
+                    <img src="${imageUrl}" alt="${property.propertyType}" class="property-image">
+                    <div class="property-details">
+                        <div class="property-status">Available</div>
+                        <h3 class="property-title">${property.propertyType}</h3>
+                        <p class="property-location">${property.city}, ${property.town}</p>
+                        <p class="property-price">$${property.price}</p>
+                        <div class="property-specs">
+                            <span>${property.size} sqft</span>
+                            <span>${property.propertyType}</span>
+                        </div>
+                        <a href="property-details.html?id=${property.propertyID}" class="view-button">View Details</a>
+                    </div>
+                `;
+                
+                grid.appendChild(propertyCard);
+            });
+        }
+    </script>
+</body>
+</html>

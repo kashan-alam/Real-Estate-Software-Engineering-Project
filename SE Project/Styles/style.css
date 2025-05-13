@@ -1,0 +1,487 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #F5F5F5;
+    /* Neutral Light Gray */
+    color: #333;
+    /* Neutral Dark Gray */
+}
+
+/* Header */
+header {
+    background-color: #004D73;
+    /* Deep Blue */
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+header .logo a {
+    text-decoration: none;
+    color: white;
+}
+
+header .logo h1 {
+    font-size: 28px;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+header .logo h1:hover {
+    color: #F2C94C;
+    /* Warm Gold */
+}
+/* General Navigation Styling */
+header nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    z-index: 10; /* Ensure navigation is on top */
+}
+
+header nav ul li {
+    position: relative;
+}
+
+header nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 10px 15px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+/* Profile Dropdown Styling */
+.profile-dropdown {
+    position: relative;
+}
+
+.profile-toggle {
+    display: flex;
+    align-items: center;
+}
+
+.profile-toggle .dropdown-arrow {
+    margin-left: 5px;
+    font-size: 12px;
+    transform: rotate(0deg);
+    transition: transform 0.3s ease;
+}
+
+/* Rotate Arrow on Toggle */
+.profile-dropdown.open .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+/* Dropdown Menu */
+.profile-dropdown .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #fff;
+    color: #333;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    list-style: none;
+    padding: 10px 0;
+    border-radius: 5px;
+    min-width: 150px;
+}
+
+.profile-dropdown .dropdown-menu li {
+    padding: 10px 15px;
+}
+
+.profile-dropdown .dropdown-menu li a {
+    color: #333;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.profile-dropdown .dropdown-menu li:hover {
+    background-color: #f0f0f0;
+}
+
+/* Show Dropdown */
+.profile-dropdown.open .dropdown-menu {
+    display: block;
+}
+
+/* Dropdown Z-index */
+.profile-dropdown .dropdown-menu {
+    z-index: 100;
+}
+
+
+nav ul li a:hover {
+    color: #F2C94C;
+    /* Warm Gold */
+}
+
+/* Hero Section */
+.hero {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: url('Images/pexels-magda-ehlers-pexels-772177.jpg') center center / cover no-repeat fixed;
+    color: white;
+    text-align: center;
+    transition: opacity 0.5s ease;
+    /* For smooth fading */
+}
+
+/* Hero Text Styling */
+.hero-text h2 {
+    font-size: 48px;
+    margin: 0;
+    color: #FFFFFF;
+    /* White */
+}
+
+.hero-text p {
+    font-size: 24px;
+    margin: 10px 0;
+}
+
+/* CTA Button */
+.cta-button {
+    display: inline-block;
+    width: 150px;
+    height: 50px;
+    border-radius: 10px;
+    border: 1px solid #F2C94C;
+    /* Warm Gold */
+    position: relative;
+    overflow: hidden;
+    transition: all 0.5s ease-in;
+    z-index: 1;
+}
+
+.cta-button::before,
+.cta-button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 0;
+    height: 100%;
+    transform: skew(15deg);
+    transition: all 0.5s;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.cta-button::before {
+    left: -10px;
+    background: #F2C94C;
+    /* Warm Gold */
+}
+
+.cta-button::after {
+    right: -10px;
+    background: #F2994A;
+    /* Muted Coral */
+}
+
+.cta-button:hover::before,
+.cta-button:hover::after {
+    width: 58%;
+}
+
+.cta-button:hover span {
+    color: #682A00;
+    /* Dark Brown */
+    transition: 0.3s;
+}
+
+.cta-button span {
+    color: #F2C94C;
+    /* Warm Gold */
+    font-size: 18px;
+    transition: all 0.3s ease-in;
+}
+
+/* Fade Effect on Scroll */
+.hero {
+    opacity: 1;
+    transition: opacity 0.4s ease;
+}
+
+body.scrolled .hero {
+    opacity: 0.2;
+    /* Fades out hero section when scrolled */
+}
+
+/* Search Section Styling */
+.search-section {
+    background-color: #F5F5F5;
+    /* Neutral Light Gray */
+    padding: 20px;
+    text-align: center;
+    border-radius: 8px;
+}
+
+.search-section h2 {
+    font-size: 24px;
+    margin-bottom: 15px;
+    color: #004D73;
+    /* Deep Blue */
+}
+
+.search-section form {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.search-section input {
+    padding: 10px;
+    font-size: 16px;
+    width: 200px;
+    border: 1px solid #CCC;
+    border-radius: 5px;
+}
+
+.search-section button {
+    padding: 10px 20px;
+    background-color: #004D73;
+    /* Deep Blue */
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-section button:hover {
+    background-color: #3BA7A4;
+    /* Soft Teal */
+}
+
+/* Featured Listings Section */
+.featured-listings {
+    text-align: center;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.featured-listings h2 {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+/* Listings Container */
+.listings-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+/* Card Styling */
+.card {
+    position: relative;
+    width: 300px;
+    height: 200px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+    perspective: 1000px;
+    transition: all 0.5s ease;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1), 0px 6px 20px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+.card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+    transition: all 0.3s ease-in-out;
+}
+
+.card__content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.6));
+    color: white;
+    opacity: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    transform: translateY(100%);
+    transition: all 0.5s ease-in-out;
+}
+
+.card:hover .card__content {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.card__title {
+    font-size: 1.5em;
+    font-weight: 700;
+    color: #fff;
+}
+
+.card__description {
+    font-size: 1em;
+    color: #ddd;
+    margin-top: 10px;
+}
+
+.card:hover img {
+    opacity: 0.8;
+    transform: scale(1.05);
+}
+
+
+/* Profile sign in form */
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: #ffffff;
+    padding: 30px;
+    width: 450px;
+    border-radius: 20px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+::placeholder {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.form button {
+    align-self: flex-end;
+}
+
+.flex-column>label {
+    color: #151717;
+    font-weight: 600;
+}
+
+.inputForm {
+    border: 1.5px solid #ecedec;
+    border-radius: 10px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    transition: 0.2s ease-in-out;
+    align-items: center;
+}
+
+.input {
+    margin-left: 10px;
+    border-radius: 10px;
+    border: none;
+    width: 100%;
+    height: 100%;
+}
+
+.input:focus {
+    outline: none;
+}
+
+.inputForm:focus-within {
+    border: 1.5px solid #2d79f3;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    justify-content: space-between;
+}
+
+.flex-row>div>label {
+    font-size: 14px;
+    color: black;
+    font-weight: 400;
+}
+
+.span {
+    font-size: 14px;
+    margin-left: 5px;
+    color: #2d79f3;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.button-submit {
+    margin: 20px 0 10px 0;
+    background-color: #151717;
+    border: none;
+    color: white;
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 10px;
+    height: 50px;
+    width: 100%;
+    cursor: pointer;
+}
+
+.p {
+    text-align: center;
+    color: black;
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+.btn {
+    margin-top: 10px;
+    width: 100%;
+    height: 50px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 500;
+    gap: 10px;
+    border: 1px solid #ededef;
+    background-color: white;
+    cursor: pointer;
+    transition: 0.2s ease-in-out;
+}
+
+.btn:hover {
+    border: 1px solid #2d79f3;
+    ;
+}
+
+
+*{
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Footer */
+footer {
+    background-color: #004D73;
+    /* Deep Blue */
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+}
